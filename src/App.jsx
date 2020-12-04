@@ -70,9 +70,44 @@ class App extends Component {
       return null
     }
     return this.state.data.items.map((item)=> {
-      return <h1>Name: {item.name}</h1>
-      return <h3>{item.allergens}</h3>
+      const nutrients = item.nutrients.map((nutrient)=> {
+        return <li>Name: {nutrient.name} Per 100g: {nutrient.per_100g}</li>
+      })
+      // parsing an object
+      const diet_label_keys = Object.keys(item.diet_labels)
+      // parsing an array
+      const diet_labels = diet_label_keys.map((diet_label)=> {
+        return <p>{item.diet_labels[diet_label].name}: {item.diet_labels[diet_label].is_compatible ? "Yes" : "No" }</p>
+      })
+      return (
+        <div>
+          <h2>Name: {item.name}</h2>
+          {/* <h3>Allergens: {item.allergens}</h3> */}
+          <p>Ingredients: {item.ingredients}</p>
+          {/* <h3>Contains Palm Oil: {item.palm_oil_ingredients.true}</h3> */}
+          {/* diet labels object needs to be converted */}
+          {/* <h3>Diet Labels: {item.diet_labels}</h3> */}
+          {/* diet flags object needs to be converted */}
+          {/* <h3>Diet Flags: {item.diet_flags}</h3> */}
+          {/* <h3>Gluten Free: {item.gluten}</h3> */}
+          {/* <h3>Gluten Free: {item.name}</h3> */}
+          <h3>Brand: {item.brand}</h3>
+          <ul>Nutrients: {nutrients}</ul>
+          <div>Diet Labels: {diet_labels}</div>
+        </div>
+      )
     }) 
+
+    return this.state.data.items.map((item)=> {
+      return <h3>Allergens: {item.allergens}</h3>
+      return <h3>Ingredients: {item.ingredients}</h3>
+      return <h3>Contains Palm Oil: {item.palm_oil_ingredients.true}</h3>
+      return <h3>Diet Labels: {item.diet_labels}</h3>
+      return <h3>Diet Flags: {item.diet_flags}</h3>
+      return <h3>Gluten Free: {item.gluten}</h3>
+      return <h3>Gluten Free: {item.name}</h3>
+    }
+    )
   }
 
   
