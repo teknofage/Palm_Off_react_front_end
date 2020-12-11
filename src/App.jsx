@@ -20,6 +20,8 @@ class App extends Component {
     }
   }
 
+  
+
   componentDidMount() {
     // Use Fetch to call API. The /test route returns a simple string
     // This call in componentDidMount will only be called once
@@ -30,6 +32,7 @@ class App extends Component {
       console.log(json)
       const { about } = json // Get a value from JSON object
       this.setState({ about }) // Set a value on state with returned value
+      
     }).catch((err) => {
       // Handle errors
       console.log(err.message)
@@ -48,9 +51,25 @@ class App extends Component {
       this.setState({
         data: json,
       })
+      this.formatIngredients(json.items[0].ingredients)
     }).catch((err) => {
       console.log(err.message)
     })
+  }
+
+  formatIngredients = (p_o_derivatives) => {
+    console.log(`Ingredients before split: `, p_o_derivatives)
+
+    // formatting ingredients
+
+    let lower_derivatives = p_o_derivatives && p_o_derivatives.toLowerCase().replace("(", "").replace(")", "")
+    let lower_derivatives_arr = lower_derivatives && lower_derivatives.split(",")
+    lower_derivatives_arr = lower_derivatives_arr.map(item => {
+      return item.trim()
+    })
+
+    console.log(`Ingredients after split:`, lower_derivatives_arr)
+    return this.state.map(lower_derivatives_arr)
   }
 
   renderMessage() {
@@ -79,6 +98,31 @@ class App extends Component {
       const diet_labels = diet_label_keys.map((diet_label)=> {
         return <p>{item.diet_labels[diet_label].name}: {item.diet_labels[diet_label].is_compatible ? "Yes" : "No" }</p>
       })
+      const list_of_palm_oil_derivatives = ["palm oil", "palm", "palm kernel oil", "PKO", "partially hydrogenated palm oil", "PHPKO", "fractionated palm oil", "FPO", "FPKO", "palmate", "sodium laureth sulphate", "elaeis guineensis", "glyceryl stearate", "hydrated palm glycerides", "cetyl palmitate"]
+      // const p_o_derivatives = item.ingredients
+      
+      let arr1 = list_of_palm_oil_derivatives
+      let arr2 = lower_derivatives_arr
+
+      function arrayMatch(arr1, arr2) {
+        var arr = [];
+        // arr1 = arr1.toString().split(',').map(Number);
+        // arr2 = arr2.toString().split(',').map(Number);
+        console.log(arr1);
+        // for array1
+        for (var i in arr1) {
+            if(arr2.indexOf(arr1[i]) !== -1)
+            arr.push(arr1[i]);
+        }
+        console.log(arr);
+     
+        return arr.sort((x,y) => x-y);
+        }
+     
+        console.log(arrayMatch(arr1, arr2)); 
+
+
+
       return (
         <div>
           <h2>Name: {item.name}</h2>
