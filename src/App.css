@@ -30,3 +30,76 @@
     transform: rotate(360deg);
   }
 }
+
+.item-name {
+  color: #1b0e08;
+  background-color: #5088d1;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  font: bold;
+  border: 2px solid black;
+  margin: 20px;
+  padding: 20px;
+}
+
+.item-ingredients {
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+  margin: 20px;
+  padding: 15px;
+}
+
+.palm-oil-ingredients {
+  background-color: #a11435;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(20px + 5vmin);
+  border: 2px solid black;
+  margin: 20px;
+  padding: 15px;
+}
+
+.brand {
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+  margin: 20px;
+  padding: 15px;
+}
+
+.nutrients {
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  border: 2px solid black;
+  margin: 20px;
+  padding: 15px;
+}
+
+.diet-labels {
+  background-color: #25b649;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: left;
+  border: 2px solid black;
+  margin: 20px;
+  padding: 15px;
+}

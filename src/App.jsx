@@ -69,7 +69,7 @@ class App extends Component {
     })
 
     console.log(`Ingredients after split:`, lower_derivatives_arr)
-    return this.state.map(lower_derivatives_arr)
+    return this.setState({ lower_derivatives_arr })
   }
 
   renderMessage() {
@@ -99,45 +99,58 @@ class App extends Component {
         return <p>{item.diet_labels[diet_label].name}: {item.diet_labels[diet_label].is_compatible ? "Yes" : "No" }</p>
       })
       const list_of_palm_oil_derivatives = ["palm oil", "palm", "palm kernel oil", "PKO", "partially hydrogenated palm oil", "PHPKO", "fractionated palm oil", "FPO", "FPKO", "palmate", "sodium laureth sulphate", "elaeis guineensis", "glyceryl stearate", "hydrated palm glycerides", "cetyl palmitate"]
-      // const p_o_derivatives = item.ingredients
+      const p_o_derivatives = item.ingredients
       
-      let arr1 = list_of_palm_oil_derivatives
-      let arr2 = lower_derivatives_arr
+      // // const palm_oil_ing_match = 
+      // let arr1 = list_of_palm_oil_derivatives
+      // let arr2 = lower_derivatives_arr
 
-      function arrayMatch(arr1, arr2) {
-        var arr = [];
-        // arr1 = arr1.toString().split(',').map(Number);
-        // arr2 = arr2.toString().split(',').map(Number);
-        console.log(arr1);
-        // for array1
-        for (var i in arr1) {
-            if(arr2.indexOf(arr1[i]) !== -1)
-            arr.push(arr1[i]);
-        }
-        console.log(arr);
+      // function arrayMatch(arr1, arr2) {
+      //   var arr = [];
+      //   // arr1 = arr1.toString().split(',').map(Number);
+      //   // arr2 = arr2.toString().split(',').map(Number);
+      //   console.log(arr1);
+      //   // for array1
+      //   for (var i in arr1) {
+      //       if(arr2.indexOf(arr1[i]) !== -1)
+      //       arr.push(arr1[i]);
+      //   }
+      //   console.log(arr);
      
-        return arr.sort((x,y) => x-y);
-        }
+      //   return arr.sort((x,y) => x-y);
+      //   }
      
-        console.log(arrayMatch(arr1, arr2)); 
+      //   console.log(arrayMatch(arr1, arr2)); 
 
 
 
       return (
         <div>
-          <h2>Name: {item.name}</h2>
+          <div class="item-name">
+            <p>Name: {item.name}</p>
+          </div>
           {/* <h3>Allergens: {item.allergens}</h3> */}
-          <p>Ingredients: {item.ingredients}</p>
-          {/* <h3>Contains Palm Oil: {item.palm_oil_ingredients.true}</h3> */}
+          <div class="item-ingredients">
+            <p>Ingredients: {item.ingredients}</p>
+          </div>
+          <div class="palm-oil-ingredients">
+            <p>Contains Palm Oil Ingredients: {item.palm_oil_match}</p>
+          </div>
           {/* diet labels object needs to be converted */}
           {/* <h3>Diet Labels: {item.diet_labels}</h3> */}
           {/* diet flags object needs to be converted */}
           {/* <h3>Diet Flags: {item.diet_flags}</h3> */}
           {/* <h3>Gluten Free: {item.gluten}</h3> */}
           {/* <h3>Gluten Free: {item.name}</h3> */}
-          <h3>Brand: {item.brand}</h3>
-          <ul>Nutrients: {nutrients}</ul>
-          <div>Diet Labels: {diet_labels}</div>
+          <div class="brand">
+            <p>Brand: {item.brand}</p>
+          </div>
+          <div class="nutrients">
+            <ul>Nutrients: {nutrients}</ul>
+          </div>
+          <div class="diet-labels">
+            <ul>Diet Labels: {diet_labels}</ul>
+          </div>
         </div>
       )
     }) 
@@ -161,19 +174,19 @@ class App extends Component {
     return (
       <div className="App">
         <p>
-          <strong>About:</strong>
+          <strong>Palm Off:</strong>
           {about}
         </p>
         <div>{this.renderMessage()}</div>
         <p>
-          <button
+          {/* <button
             type="button"
             onClick={() => {
               this.fetchMessage()
             }}
           >
           Random
-          </button>
+          </button> */}
         </p>
         { this.render_data() }
       </div>
