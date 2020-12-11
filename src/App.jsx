@@ -8,6 +8,8 @@ import React, { Component } from 'react';
 // }
 import './App.css';
 
+const list_of_palm_oil_derivatives = ["palm oil", "palm", "palm kernel oil", "PKO", "partially hydrogenated palm oil", "PHPKO", "fractionated palm oil", "FPO", "FPKO", "palmate", "sodium laureth sulphate", "elaeis guineensis", "glyceryl stearate", "hydrated palm glycerides", "cetyl palmitate"]
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -17,6 +19,7 @@ class App extends Component {
       about: null,
       message: null,
       data: null,
+
     }
   }
 
@@ -48,28 +51,53 @@ class App extends Component {
     // This calls a route and passes value in the query string.
     fetch('/food?name=Nutella').then(res => res.json()).then((json) => {
       console.log(">", json)
+
+      let updatedJson = json.items.map(jsonItem => {
+        jsonItem = {...jsonItem, palmOilMatches: this.findPalmOilIngredients(this.formatIngredients(jsonItem.ingredients))}
+        return jsonItem;
+      })      
+
+      console.log("Updated json: ", updatedJson);
+
       this.setState({
-        data: json,
+        data: updatedJson,
       })
-      this.formatIngredients(json.items[0].ingredients)
+      
     }).catch((err) => {
       console.log(err.message)
     })
   }
 
-  formatIngredients = (p_o_derivatives) => {
-    console.log(`Ingredients before split: `, p_o_derivatives)
+  findPalmOilIngredients = (inputDerivatives) => {
+    let matches = new Set();
+
+    inputDerivatives.forEach(inputItem => {
+      list_of_palm_oil_derivatives.forEach(constItem => {
+        if(inputItem === constItem){
+          matches.add(inputItem)
+        }
+      })
+    })
+
+    return Array.from(matches);
+  }
+
+  formatIngredients = (ingredients) => {
+    console.log(`Ingredients before split: `, ingredients)
 
     // formatting ingredients
+    if(ingredients == null){
+      return [];
+    }
 
-    let lower_derivatives = p_o_derivatives && p_o_derivatives.toLowerCase().replace("(", "").replace(")", "")
+    let lower_derivatives = ingredients && ingredients.toLowerCase().replace("(", "").replace(")", "")
     let lower_derivatives_arr = lower_derivatives && lower_derivatives.split(",")
     lower_derivatives_arr = lower_derivatives_arr.map(item => {
       return item.trim()
     })
 
     console.log(`Ingredients after split:`, lower_derivatives_arr)
-    return this.setState({ lower_derivatives_arr })
+    return lower_derivatives_arr;
   }
 
   renderMessage() {
@@ -88,7 +116,8 @@ class App extends Component {
     if (this.state.data === null) {
       return null
     }
-    return this.state.data.items.map((item)=> {
+    return this.state.data.map((item)=> {
+      console.log("ITEM:",item)
       const nutrients = item.nutrients.map((nutrient)=> {
         return <li>Name: {nutrient.name} Per 100g: {nutrient.per_100g}</li>
       })
@@ -98,31 +127,6 @@ class App extends Component {
       const diet_labels = diet_label_keys.map((diet_label)=> {
         return <p>{item.diet_labels[diet_label].name}: {item.diet_labels[diet_label].is_compatible ? "Yes" : "No" }</p>
       })
-      const list_of_palm_oil_derivatives = ["palm oil", "palm", "palm kernel oil", "PKO", "partially hydrogenated palm oil", "PHPKO", "fractionated palm oil", "FPO", "FPKO", "palmate", "sodium laureth sulphate", "elaeis guineensis", "glyceryl stearate", "hydrated palm glycerides", "cetyl palmitate"]
-      const p_o_derivatives = item.ingredients
-      
-      // // const palm_oil_ing_match = 
-      // let arr1 = list_of_palm_oil_derivatives
-      // let arr2 = lower_derivatives_arr
-
-      // function arrayMatch(arr1, arr2) {
-      //   var arr = [];
-      //   // arr1 = arr1.toString().split(',').map(Number);
-      //   // arr2 = arr2.toString().split(',').map(Number);
-      //   console.log(arr1);
-      //   // for array1
-      //   for (var i in arr1) {
-      //       if(arr2.indexOf(arr1[i]) !== -1)
-      //       arr.push(arr1[i]);
-      //   }
-      //   console.log(arr);
-     
-      //   return arr.sort((x,y) => x-y);
-      //   }
-     
-      //   console.log(arrayMatch(arr1, arr2)); 
-
-
 
       return (
         <div>
@@ -134,7 +138,7 @@ class App extends Component {
             <p>Ingredients: {item.ingredients}</p>
           </div>
           <div class="palm-oil-ingredients">
-            <p>Contains Palm Oil Ingredients: {item.palm_oil_match}</p>
+            <p>Contains Following Palm Oil Ingredients: {item.palmOilMatches.join(", ")}</p>
           </div>
           {/* diet labels object needs to be converted */}
           {/* <h3>Diet Labels: {item.diet_labels}</h3> */}
