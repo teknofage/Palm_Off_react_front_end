@@ -31,6 +31,10 @@
   }
 }
 
+.app{
+  background-image: url(./images/buddies.jpeg);
+}
+
 .item-name {
   color: #1b0e08;
   background-color: #5088d1;

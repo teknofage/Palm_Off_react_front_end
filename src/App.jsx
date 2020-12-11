@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable semi */
 import React, { Component } from 'react';
+import buddies from './images/buddies.jpeg'; 
 
 // function App() {
 //   return <h1>Hello Mitchell</h1>;
@@ -130,6 +131,9 @@ class App extends Component {
 
       return (
         <div>
+          <div>
+            <img src={buddies} alt="orange buddies" />
+          </div>
           <div class="item-name">
             <p>Name: {item.name}</p>
           </div>
