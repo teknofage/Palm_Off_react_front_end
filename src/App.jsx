@@ -42,8 +42,10 @@ class App extends Component {
       about: null,
       message: null,
       data: null,
-
+      foodName: "", 
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.fetchMessage = this.fetchMessage.bind(this);
   }
 
   
@@ -72,7 +74,8 @@ class App extends Component {
     // Wrapping the API call in a function allow you to make calls to this
     // API as often as needed.
     // This calls a route and passes value in the query string.
-    fetch('/food?name=Nutella').then(res => res.json()).then((json) => {
+    var name = this.state.foodName
+    fetch(`/food?name=${name}`).then(res => res.json()).then((json) => {
       console.log(">", json)
 
       let updatedJson = json.items.map(jsonItem => {
@@ -134,6 +137,10 @@ class App extends Component {
 
     return <h1>{message}</h1>
   }
+  
+  handleChange(event) {
+    this.setState({foodName: event.target.value});
+  }
 
   render_data() {
     if (this.state.data === null) {
@@ -156,15 +163,7 @@ class App extends Component {
           <div>
             <img src={buddies} alt="orange buddies" />
           </div>
-          <div class="input-group"> 
-            <span class="input-group-addon">insert query prefix here
-            </span>
-            <input id="interactive" type="text" class="form-control" placeholder="nutella"></input>
-            <span class="input-group-btn">
-              <button onclick="interactive_call(); return false;"
-              class="btn btn-primary">Search</button>
-            </span>
-          </div>
+          
           <div class="item-name">
             <p>Name: {item.name}</p>
           </div>
@@ -218,6 +217,15 @@ class App extends Component {
         </p>
         <div>{this.renderMessage()}</div>
         <p>
+          <div class="input-group"> 
+            <span class="input-group-addon">insert query prefix here
+            </span>
+            <input type="text" value= {this.state.foodName} onChange={this.handleChange} class="form-control" placeholder="nutella" />
+            <span class="input-group-btn">
+              <button onClick={this.fetchMessage}
+              class="btn btn-primary">Search</button>
+            </span>
+          </div>
           {/* <button
             type="button"
             onClick={() => {
