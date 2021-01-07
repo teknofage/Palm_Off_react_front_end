@@ -9,7 +9,29 @@ import buddies from './images/buddies.jpeg';
 // }
 import './App.css';
 
-const list_of_palm_oil_derivatives = ["palm oil", "palm", "palm kernel oil", "PKO", "partially hydrogenated palm oil", "PHPKO", "fractionated palm oil", "FPO", "FPKO", "palmate", "sodium laureth sulphate", "elaeis guineensis", "glyceryl stearate", "hydrated palm glycerides", "cetyl palmitate"]
+const list_of_palm_oil_derivatives = [
+  "palm oil", 
+  "palm kernel oil", 
+  "PKO", 
+  "partially hydrogenated palm oil", 
+  "PHPKO", 
+  "fractionated palm oil", 
+  "FPO", 
+  "FPKO", 
+  "palmate", 
+  "sodium laureth sulphate", 
+  "elaeis guineensis", 
+  "glyceryl stearate", 
+  "hydrated palm glycerides", 
+  "cetyl palmitate", 
+  "decyl glucoside", 
+  "lauryl glucoside", 
+  "sodium lauryl sulfate", 
+  "ascorbyl palmitate",
+  "retinyl palmitate",
+  "ethylhexylglycerin",
+  "glyceryl stearate",
+  ]
 
 class App extends Component {
   constructor(props) {
@@ -133,6 +155,15 @@ class App extends Component {
         <div>
           <div>
             <img src={buddies} alt="orange buddies" />
+          </div>
+          <div class="input-group"> 
+            <span class="input-group-addon">insert query prefix here
+            </span>
+            <input id="interactive" type="text" class="form-control" placeholder="nutella"></input>
+            <span class="input-group-btn">
+              <button onclick="interactive_call(); return false;"
+              class="btn btn-primary">Search</button>
+            </span>
           </div>
           <div class="item-name">
             <p>Name: {item.name}</p>
