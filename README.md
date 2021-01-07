@@ -1,4 +1,4 @@
-# React Express Front End Starter 
+# Palm OFF React Express Front End 
 
 This project is a front end project meant to work with the Express backend [here](https://github.com/teknofage/Palm_Off_react_express_server). 
 
