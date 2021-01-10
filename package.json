@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "babel-loader": "^8.2.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.14.0",
+    "react-barcode-reader": "0.0.2",
+    "react-dom": "^16.14.0",
     "react-scripts": "^4.0.0"
   },
   "proxy": "http://localhost:4000",

@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable semi */
 import React, { Component } from 'react';
+import BarcodeReader from 'react-barcode-reader';
 import buddies from './images/buddies.jpeg'; 
 
 // function App() {
@@ -43,6 +44,7 @@ class App extends Component {
       message: null,
       data: null,
       foodName: "", 
+      foodLink: "",
     }
     this.handleChange = this.handleChange.bind(this);
     this.fetchMessage = this.fetchMessage.bind(this);
@@ -160,12 +162,11 @@ class App extends Component {
 
       return (
         <div>
-          <div>
-            <img src={buddies} alt="orange buddies" />
-          </div>
-          
           <div class="item-name">
-            <p>Name: {item.name}</p>
+            <p>Product Name: {item.name}</p>
+          </div>
+          <div class="brand">
+            <p>Brand: {item.brand}</p>
           </div>
           {/* <h3>Allergens: {item.allergens}</h3> */}
           <div class="item-ingredients">
@@ -180,9 +181,6 @@ class App extends Component {
           {/* <h3>Diet Flags: {item.diet_flags}</h3> */}
           {/* <h3>Gluten Free: {item.gluten}</h3> */}
           {/* <h3>Gluten Free: {item.name}</h3> */}
-          <div class="brand">
-            <p>Brand: {item.brand}</p>
-          </div>
           <div class="nutrients">
             <ul>Nutrients: {nutrients}</ul>
           </div>
@@ -215,26 +213,29 @@ class App extends Component {
           <strong>Palm Off:</strong>
           {about}
         </p>
+        <div>
+          <img src={buddies} alt="orange buddies" />
+        </div>
         <div>{this.renderMessage()}</div>
-        <p>
-          <div class="input-group"> 
-            <span class="input-group-addon">insert query prefix here
+          <div className="input-group"> 
+            <span className="input-group-addon">insert query prefix here
             </span>
-            <input type="text" value= {this.state.foodName} onChange={this.handleChange} class="form-control" placeholder="nutella" />
-            <span class="input-group-btn">
+            <input type="text" value= {this.state.foodName} onChange={this.handleChange} className="form-control" placeholder="nutella" />
+            <span className="input-group-btn">
               <button onClick={this.fetchMessage}
-              class="btn btn-primary">Search</button>
+              className="btn btn-primary">Search</button>
             </span>
           </div>
-          {/* <button
-            type="button"
-            onClick={() => {
-              this.fetchMessage()
-            }}
-          >
-          Random
-          </button> */}
-        </p>
+          <div>{this.renderMessage()}</div>
+          <div className="link-input"> 
+            {/* <span className="link-input-group">insert link to food product here
+            </span>
+            <input type="link" value= {this.state.foodLink} onChange={this.handleChange} class="form-control" placeholder="nutella" />
+            <span className="link-input-btn">
+              <button onClick={this.fetchMessage}
+              className="btn btn-primary">Search</button>
+            </span> */}
+          </div>
         { this.render_data() }
       </div>
     );
