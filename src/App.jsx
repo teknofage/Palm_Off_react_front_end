@@ -34,8 +34,8 @@ const list_of_palm_oil_derivatives = [
   "glyceryl stearate",
   ]
 
-  const producers_wwf_po_scores = [
-    {"name": "ferrero usa", "rspo-member?": "Yes", "score": 21.5,
+  const list_of_food_producers_wwf_po_scores = [
+    {"name": "ferrero usa", "rspo-member?": "Yes", "score-2020": 21.5,
     } 
     ]
 
@@ -107,7 +107,7 @@ class App extends Component {
       console.log(">", json)
 
       let updatedJson = json.items.map(jsonItem => {
-        jsonItem = {...jsonItem, palmOilMatches: this.findPalmOilIngredients(this.formatIngredients(jsonItem.ingredients))}
+        jsonItem = {...jsonItem, palmOilMatches: this.findPalmOilIngredients(this.formatIngredients(jsonItem.ingredients)), rspoMember: this. , wwf2020Score: this.}
         return jsonItem;
       })      
 
@@ -152,6 +152,38 @@ class App extends Component {
 
     console.log(`Ingredients after split:`, lower_derivatives_arr)
     return lower_derivatives_arr;
+  }
+
+  findBrandPOScores = (inputBrand) => {
+    let matches = new Set();
+
+    inputBrand.forEach(inputItem => {
+      list_of_food_producers_wwf_po_scores.forEach(constItem => {
+        if(inputItem === constItem){
+          matches.add(inputItem)
+        }
+      })
+    })
+
+    return Array.from(matches);
+  }
+
+  formatBrand = (brand) => {
+    console.log(`Brand before split: `, brand)
+
+    // formatting ingredients
+    if(brand == null){
+      return [];
+    }
+
+    let lower_brand = brand && brand.toLowerCase().replace("(", "").replace(")", "")
+    let lower_brand_arr = lower_brand && lower_brand.split(",")
+    lower_brand_arr = lower_brand_arr.map(item => {
+      return item.trim()
+    })
+
+    console.log(`Brand after split:`, lower_brand_arr)
+    return lower_brand_arr;
   }
 
   renderMessage() {
