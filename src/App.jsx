@@ -107,7 +107,11 @@ class App extends Component {
       console.log(">", json)
 
       let updatedJson = json.items.map(jsonItem => {
-        jsonItem = {...jsonItem, palmOilMatches: this.findPalmOilIngredients(this.formatIngredients(jsonItem.ingredients)), rspoMember: this. , wwf2020Score: this.}
+        jsonItem = {...jsonItem, 
+          palmOilMatches: this.findPalmOilIngredients(this.formatIngredients(jsonItem.ingredients)), 
+          rspoMember: this.findBrandPOScores(this.formatBrand(jsonItem.brand)), 
+          wwf2020Score: this.findBrandPOScores(this.formatBrand(jsonItem.brand))
+        }
         return jsonItem;
       })      
 
