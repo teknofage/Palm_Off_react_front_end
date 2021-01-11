@@ -34,6 +34,11 @@ const list_of_palm_oil_derivatives = [
   "glyceryl stearate",
   ]
 
+  const producers_wwf_po_scores = [
+    {"name": "ferrero usa", "rspo-member?": "Yes", "score": 21.5,
+    } 
+    ]
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -45,11 +50,32 @@ class App extends Component {
       data: null,
       foodName: "", 
       foodLink: "",
+      result: 'No result',
     }
     this.handleChange = this.handleChange.bind(this);
     this.fetchMessage = this.fetchMessage.bind(this);
+    this.handleScan = this.handleScan.bind(this);
   }
-
+  handleScan(data){
+    this.setState({
+      result: data,
+    })
+  }
+  handleError(err){
+    console.error(err)
+  }
+  render(){
+ 
+    return(
+      <div>
+        <BarcodeReader
+          onError={this.handleError}
+          onScan={this.handleScan}
+          />
+        <p>{this.state.result}</p>
+      </div>
+    )
+  }
   
 
   componentDidMount() {
@@ -174,6 +200,12 @@ class App extends Component {
           </div>
           <div class="palm-oil-ingredients">
             <p>Contains Following Palm Oil Ingredients: {item.palmOilMatches.join(", ")}</p>
+          </div>
+          {/* <div class="rspo-membership">
+            <p>Is Producer a Member of the Roundtable for Sustainable Palm Oil (RSPO)?: {item.rspoMatches.join(", ")}</p>
+          </div> */}
+          <div class="wwf-po-scores">
+            <p>How does the WWF rate this company in terms of upholding its commitments to eliminating deforestation from its palm oil supply chain?: {item.wwfScore} / 22</p>
           </div>
           {/* diet labels object needs to be converted */}
           {/* <h3>Diet Labels: {item.diet_labels}</h3> */}
