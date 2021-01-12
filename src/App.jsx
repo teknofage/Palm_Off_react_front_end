@@ -35,9 +35,20 @@ const list_of_palm_oil_derivatives = [
   ]
 
   const list_of_food_producers_wwf_po_scores = [
-    {"name": "ferrero usa", "rspo-member?": "Yes", "score-2020": 21.5,
-    } 
+    {name: "ferrero", rspoMember: "Yes", score2020: 21.5} 
     ]
+  function findBrand(brand) {
+    console.log(brand)
+    brand = brand.toLowerCase().replace("(", "").replace(")", "").replace(/\./g, "").replace(",", "")
+    for (let i = 0; i < list_of_food_producers_wwf_po_scores.length; i += 1) {
+      const foodProducer = list_of_food_producers_wwf_po_scores[i]
+      console.log(brand)
+      console.log(foodProducer.name)
+      if(brand.includes(foodProducer.name)) {
+        return foodProducer
+      }
+    }
+  }  
 
 class App extends Component {
   constructor(props) {
@@ -107,11 +118,14 @@ class App extends Component {
       console.log(">", json)
 
       let updatedJson = json.items.map(jsonItem => {
+        const {rspoMember, score2020} = findBrand(jsonItem.brand)
         jsonItem = {...jsonItem, 
           palmOilMatches: this.findPalmOilIngredients(this.formatIngredients(jsonItem.ingredients)), 
-          rspoMember: this.findBrandPOScores(this.formatBrand(jsonItem.brand)), 
-          wwf2020Score: this.findBrandPOScores(this.formatBrand(jsonItem.brand))
+          rspoMember,
+          score2020
         }
+        console.log("*********")
+        console.log(jsonItem)
         return jsonItem;
       })      
 
@@ -158,38 +172,6 @@ class App extends Component {
     return lower_derivatives_arr;
   }
 
-  findBrandPOScores = (inputBrand) => {
-    let matches = new Set();
-
-    inputBrand.forEach(inputItem => {
-      list_of_food_producers_wwf_po_scores.forEach(constItem => {
-        if(inputItem === constItem){
-          matches.add(inputItem)
-        }
-      })
-    })
-
-    return Array.from(matches);
-  }
-
-  formatBrand = (brand) => {
-    console.log(`Brand before split: `, brand)
-
-    // formatting ingredients
-    if(brand == null){
-      return [];
-    }
-
-    let lower_brand = brand && brand.toLowerCase().replace("(", "").replace(")", "")
-    let lower_brand_arr = lower_brand && lower_brand.split(",")
-    lower_brand_arr = lower_brand_arr.map(item => {
-      return item.trim()
-    })
-
-    console.log(`Brand after split:`, lower_brand_arr)
-    return lower_brand_arr;
-  }
-
   renderMessage() {
     // Used to conditionally render data from server.
     // Returns null if message is null otherwise returns
@@ -222,9 +204,16 @@ class App extends Component {
         return <p>{item.diet_labels[diet_label].name}: {item.diet_labels[diet_label].is_compatible ? "Yes" : "No" }</p>
       })
 
+      // parsing an object
+      const diet_flag_keys = Object.keys(item.diet_flags)
+      // parsing an array
+      const diet_flags = diet_flag_keys.map((diet_flag)=> {
+        return <p>{item.diet_flags[diet_flag].name}: {item.diet_flags[diet_flag].is_compatible ? "Yes" : "No" }</p>
+      })
+
       return (
         <div>
-          <div class="item-name">
+          <div className="item-name">
             <p>Product Name: {item.name}</p>
           </div>
           <div class="brand">
@@ -237,11 +226,11 @@ class App extends Component {
           <div class="palm-oil-ingredients">
             <p>Contains Following Palm Oil Ingredients: {item.palmOilMatches.join(", ")}</p>
           </div>
-          {/* <div class="rspo-membership">
-            <p>Is Producer a Member of the Roundtable for Sustainable Palm Oil (RSPO)?: {item.rspoMatches.join(", ")}</p>
-          </div> */}
-          <div class="wwf-po-scores">
-            <p>How does the WWF rate this company in terms of upholding its commitments to eliminating deforestation from its palm oil supply chain?: {item.wwfScore} / 22</p>
+          <div class="rspo-membership">
+            <p>Is Producer a Member of the Roundtable for Sustainable Palm Oil (RSPO)?: {item.rspoMember}</p>
+          </div>
+          <div class="wwf-po-2020-scores">
+            <p>How did the WWF rate this company in terms of upholding its commitments to eliminating deforestation from its palm oil supply chain in 2020?: {item.score2020} / 22</p>
           </div>
           {/* diet labels object needs to be converted */}
           {/* <h3>Diet Labels: {item.diet_labels}</h3> */}
@@ -254,6 +243,9 @@ class App extends Component {
           </div>
           <div class="diet-labels">
             <ul>Diet Labels: {diet_labels}</ul>
+          </div>
+          <div class="diet-flags">
+            <ul>Diet Flags: {diet_flags}</ul>
           </div>
         </div>
       )

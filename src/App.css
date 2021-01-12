@@ -89,6 +89,28 @@
   padding: 15px;
 }
 
+.rspo-membership {
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+  margin: 20px;
+  padding: 15px;
+}
+
+.wwf-po-2020-scores{
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+  margin: 20px;
+  padding: 15px;
+}
+
 .nutrients {
   min-height: 10vh;
   display: flex;
