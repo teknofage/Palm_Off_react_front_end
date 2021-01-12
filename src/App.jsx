@@ -38,16 +38,18 @@ const list_of_palm_oil_derivatives = [
     {name: "ferrero", rspoMember: "Yes", score2020: 21.5} 
     ]
   function findBrand(brand) {
-    console.log(brand)
+    console.log("Brand before: ", brand)
     brand = brand.toLowerCase().replace("(", "").replace(")", "").replace(/\./g, "").replace(",", "")
     for (let i = 0; i < list_of_food_producers_wwf_po_scores.length; i += 1) {
       const foodProducer = list_of_food_producers_wwf_po_scores[i]
-      console.log(brand)
-      console.log(foodProducer.name)
+      console.log("Brand after: ", brand)
+      console.log("Name of brand in list of Producers: ", foodProducer.name)
       if(brand.includes(foodProducer.name)) {
         return foodProducer
       }
     }
+    return {name: "No brand listed, or no brand match.", rspoMember: "Not enough data", score2020: "Not enough data"} 
+
   }  
 
 class App extends Component {
@@ -114,29 +116,32 @@ class App extends Component {
     // API as often as needed.
     // This calls a route and passes value in the query string.
     var name = this.state.foodName
-    fetch(`/food?name=${name}`).then(res => res.json()).then((json) => {
+    fetch(`/food?name=${name}`)
+      .then(res => res.json())
+      .then((json) => {
       console.log(">", json)
 
       let updatedJson = json.items.map(jsonItem => {
         const {rspoMember, score2020} = findBrand(jsonItem.brand)
+        console.log("RSPO Member? ", rspoMember, "Score 2020 ", score2020)
         jsonItem = {...jsonItem, 
           palmOilMatches: this.findPalmOilIngredients(this.formatIngredients(jsonItem.ingredients)), 
           rspoMember,
           score2020
         }
         console.log("*********")
-        console.log(jsonItem)
+        // console.log("jsonItem: ", jsonItem)
         return jsonItem;
       })      
 
-      console.log("Updated json: ", updatedJson);
+      console.log(`Updated json: `, updatedJson);
 
       this.setState({
         data: updatedJson,
       })
       
     }).catch((err) => {
-      console.log(err.message)
+      console.log("Error Message: ", err.message)
     })
   }
 
