@@ -78,17 +78,30 @@ const list_of_palm_oil_derivatives = [
   ]
 
   const list_of_food_producers_wwf_po_scores = [
-    {name: "ferrero", rspoMember: "Yes", score2020: 21.5} 
-    {name: "mars", rspoMember: "Yes", score2020: 17.25}
-    {name: "nestle", rspoMember: "Yes", score2020: 21.5}
+    {name: "ferrero", rspoMember: "Yes", score2020: 21.5}, 
+    {name: "mars", rspoMember: "Yes", score2020: 17.25},
+    {name: "nestle", rspoMember: "Yes", score2020: 21.5},
     ]
+
+  const list_of_fully_sustainable_supply_chains_2019 = [
+    "conagra",
+    "ferrero",
+    "general mills",
+    "hershey", 
+    "kellogg",
+    "kraft heinz",
+    "mars",
+    "pepsico",
+    "smucker's",
+  ]
+
   function findBrand(brand) {
-    console.log("Brand before: ", brand)
+    // console.log("Brand before: ", brand)
     brand = brand.toLowerCase().replace("(", "").replace(")", "").replace(/\./g, "").replace(",", "")
     for (let i = 0; i < list_of_food_producers_wwf_po_scores.length; i += 1) {
       const foodProducer = list_of_food_producers_wwf_po_scores[i]
-      console.log("Brand after: ", brand)
-      console.log("Name of brand in list of Producers: ", foodProducer.name)
+      // console.log("Brand after: ", brand)
+      // console.log("Name of brand in list of Producers: ", foodProducer.name)
       if(brand.includes(foodProducer.name)) {
         return foodProducer
       }
@@ -143,13 +156,13 @@ class App extends Component {
       // stream the response as JSON
       return res.json()
     }).then((json) => {
-      console.log(json)
+      // console.log(json)
       const { about } = json // Get a value from JSON object
       this.setState({ about }) // Set a value on state with returned value
       
     }).catch((err) => {
       // Handle errors
-      console.log(err.message)
+      // console.log(err.message)
     })
 
     // Let's call another API
@@ -160,30 +173,34 @@ class App extends Component {
     // Wrapping the API call in a function allow you to make calls to this
     // API as often as needed.
     // This calls a route and passes value in the query string.
-    var name = this.state.foodName
+    const name = this.state.foodName
     fetch(`/food?name=${name}`)
       .then(res => res.json())
       .then((json) => {
-      console.log(">", json)
+      // console.log(">", json)    
 
-      let updatedJson = json.items.map(jsonItem => {
-        const {rspoMember, score2020} = findBrand(jsonItem.brand)
-        console.log("RSPO Member? ", rspoMember, "Score 2020 ", score2020)
-        jsonItem = {...jsonItem, 
-          palmOilMatches: this.findPalmOilIngredients(this.formatIngredients(jsonItem.ingredients)), 
-          rspoMember,
-          score2020
-        }
-        console.log("*********")
-        // console.log("jsonItem: ", jsonItem)
-        return jsonItem;
-      })      
-
-      console.log(`Updated json: `, updatedJson);
-
-      this.setState({
-        data: updatedJson,
-      })
+      // console.log(`Updated json: `, updatedJson);
+      if ( json.error ) {
+        this.setState({ 
+            data: json
+        })
+      } else {
+        let updatedJson = json.items.map(jsonItem => {
+          const {rspoMember, score2020} = findBrand(jsonItem.brand)
+          console.log("RSPO Member? ", rspoMember, "Score 2020 ", score2020)
+          jsonItem = {...jsonItem, 
+            palmOilMatches: this.findPalmOilIngredients(this.formatIngredients(jsonItem.ingredients)), 
+            rspoMember,
+            score2020
+          }
+          // console.log("*********")
+          // console.log("jsonItem: ", jsonItem)
+          return jsonItem;
+        })  
+        this.setState({
+            data: updatedJson,
+        })
+      }
       
     }).catch((err) => {
       console.log("Error Message: ", err.message)
@@ -205,7 +222,7 @@ class App extends Component {
   }
 
   formatIngredients = (ingredients) => {
-    console.log(`Ingredients before split: `, ingredients)
+    // console.log(`Ingredients before split: `, ingredients)
 
     // formatting ingredients
     if(ingredients == null){
@@ -218,7 +235,7 @@ class App extends Component {
       return item.trim()
     })
 
-    console.log(`Ingredients after split:`, lower_derivatives_arr)
+    // console.log(`Ingredients after split:`, lower_derivatives_arr)
     return lower_derivatives_arr;
   }
 
@@ -239,11 +256,12 @@ class App extends Component {
   }
 
   render_data() {
-    if (this.state.data === null) {
+    const {data} = this.state
+    if (data === null || data.error) {
       return null
     }
-    return this.state.data.map((item)=> {
-      console.log("ITEM:",item)
+    return data.map((item)=> {
+      // console.log("ITEM:",item)
       const nutrients = item.nutrients.map((nutrient)=> {
         return <li>Name: {nutrient.name} Per 100g: {nutrient.per_100g}</li>
       })
@@ -274,7 +292,7 @@ class App extends Component {
             <p>Ingredients: {item.ingredients}</p>
           </div>
           <div class="palm-oil-ingredients">
-            <p>Contains Following Palm Oil Ingredients: {item.palmOilMatches.join(", ")}</p>
+            <p>Contains Following Palm Oil Ingredients and/or Derivatives: {item.palmOilMatches.join(", ")}</p>
           </div>
           <div class="rspo-membership">
             <p>Is Producer a Member of the Roundtable for Sustainable Palm Oil (RSPO)?: {item.rspoMember}</p>
@@ -316,9 +334,19 @@ class App extends Component {
   
   render() {
     const { about, data } = this.state
-
+    console.log("Bend the knee!", data)
     return (
       <div className="App">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+        
+          <ul class="nav navbar-nav navbar-right">
+          <li><a href="/logout">Logout</a></li>
+           <li><a href="/login">Login</a></li>
+          <li><a href="/sign-up">Sign Up</a></li>
+          </ul>
+      </div>
+    </nav>
         <p>
           <strong>Palm Off:</strong>
           {about}
@@ -328,13 +356,18 @@ class App extends Component {
         </div>
         <div>{this.renderMessage()}</div>
           <div className="input-group"> 
-            <span className="input-group-addon">insert query prefix here
+            <span className="input-group-addon">Insert name of food product here. More precise searches result in more selectively filtered results.
             </span>
             <input type="text" value= {this.state.foodName} onChange={this.handleChange} className="form-control" placeholder="nutella" />
             <span className="input-group-btn">
               <button onClick={this.fetchMessage}
               className="btn btn-primary">Search</button>
             </span>
+            <div>
+            How's my driving? Call 0891-50-50-50
+            {/* if/else statement with double boolean, : is else */}
+              {data && data.error ? <p>{data.error}</p> : null}
+            </div>
           </div>
           <div>{this.renderMessage()}</div>
           <div className="link-input"> 
