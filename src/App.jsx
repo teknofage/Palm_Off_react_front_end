@@ -3,11 +3,13 @@
 /* eslint-disable semi */
 import React, { Component } from 'react';
 import BarcodeReader from 'react-barcode-reader';
-import buddies from './images/buddies.jpeg'; 
+import buddies from './images/buddies.jpeg';
+import { Link, navigate} from '@reach/router';
+import axios from 'axios';
 
-// function App() {
-//   return <h1>Hello Mitchell</h1>;
-// }
+// import './login.html'
+// import './sign-up.html'
+
 import './App.css';
 
 const list_of_palm_oil_derivatives = [
@@ -83,17 +85,17 @@ const list_of_palm_oil_derivatives = [
     {name: "nestle", rspoMember: "Yes", score2020: 21.5},
     ]
 
-  const list_of_fully_sustainable_supply_chains_2019 = [
-    "conagra",
-    "ferrero",
-    "general mills",
-    "hershey", 
-    "kellogg",
-    "kraft heinz",
-    "mars",
-    "pepsico",
-    "smucker's",
-  ]
+  // const list_of_fully_sustainable_supply_chains_2019 = [
+  //   "conagra",
+  //   "ferrero",
+  //   "general mills",
+  //   "hershey", 
+  //   "kellogg",
+  //   "kraft heinz",
+  //   "mars",
+  //   "pepsico",
+  //   "smucker's",
+  // ]
 
   function findBrand(brand) {
     // console.log("Brand before: ", brand)
@@ -125,6 +127,9 @@ class App extends Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.fetchMessage = this.fetchMessage.bind(this);
+    this.fetchLogout = this.fetchLogout.bind(this);
+    this.fetchLogin = this.fetchLogin.bind(this);
+    this.fetchSignup = this.fetchSignup.bind(this);
     this.handleScan = this.handleScan.bind(this);
   }
   handleScan(data){
@@ -135,7 +140,7 @@ class App extends Component {
   handleError(err){
     console.error(err)
   }
-  render(){
+  renderBarcode(){
  
     return(
       <div>
@@ -206,6 +211,25 @@ class App extends Component {
       console.log("Error Message: ", err.message)
     })
   }
+
+  fetchSignup() {
+    fetch(`/sign-up`)
+    .then((res) => {
+      return <p>Hello Cao!</p>
+    })
+  }
+  
+
+  fetchLogin() {
+    fetch(`/login`)
+    .then(res.render`/login`)
+  }
+
+  fetchLogout() {
+    fetch(`/logout`)
+    .then(res.render`/logout`)
+  }
+
 
   findPalmOilIngredients = (inputDerivatives) => {
     let matches = new Set();
@@ -319,16 +343,16 @@ class App extends Component {
       )
     }) 
 
-    return this.state.data.items.map((item)=> {
-      return <h3>Allergens: {item.allergens}</h3>
-      return <h3>Ingredients: {item.ingredients}</h3>
-      return <h3>Contains Palm Oil: {item.palm_oil_ingredients.true}</h3>
-      return <h3>Diet Labels: {item.diet_labels}</h3>
-      return <h3>Diet Flags: {item.diet_flags}</h3>
-      return <h3>Gluten Free: {item.gluten}</h3>
-      return <h3>Gluten Free: {item.name}</h3>
-    }
-    )
+    // return this.state.data.items.map((item)=> {
+    //   return <h3>Allergens: {item.allergens}</h3>
+    //   return <h3>Ingredients: {item.ingredients}</h3>
+    //   return <h3>Contains Palm Oil: {item.palm_oil_ingredients.true}</h3>
+    //   return <h3>Diet Labels: {item.diet_labels}</h3>
+    //   return <h3>Diet Flags: {item.diet_flags}</h3>
+    //   return <h3>Gluten Free: {item.gluten}</h3>
+    //   return <h3>Gluten Free: {item.name}</h3>
+    // }
+    // )
   }
 
   
@@ -339,11 +363,20 @@ class App extends Component {
       <div className="App">
       <nav class="navbar navbar-default">
         <div class="container-fluid">
-        
-          <ul class="nav navbar-nav navbar-right">
-          <li><a href="/logout">Logout</a></li>
-           <li><a href="/login">Login</a></li>
-          <li><a href="/sign-up">Sign Up</a></li>
+        <ul>
+          {/* <span className="input-group-btn">
+              <button onClick={this.fetchLogout}
+              className="btn btn-primary">Logout</button>
+            </span> */}
+           
+           <span className="input-group-btn">
+              <Link to="/login"><button className="btn btn-primary">Login</button></Link>
+            </span>
+         
+          <span className="input-group-btn">
+              <button onClick={this.fetchSignup}
+              className="btn btn-primary">Signup</button>
+            </span>
           </ul>
       </div>
     </nav>
@@ -364,7 +397,7 @@ class App extends Component {
               className="btn btn-primary">Search</button>
             </span>
             <div>
-            How's my driving? Call 0891-50-50-50
+            {/* How's my driving? Call 0891-50-50-50 */}
             {/* if/else statement with double boolean, : is else */}
               {data && data.error ? <p>{data.error}</p> : null}
             </div>
